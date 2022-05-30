@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import Activity from "./Activity";
+import axios from 'axios'
 
 function App() {
-  //const [items, setItems] = useState([]);
+  const [activ, setActiv] = useState([]);
 
   /*useEffect(() => {
     fetch("https://www.boredapi.com/api/activity")
@@ -13,7 +14,20 @@ function App() {
         }
       )
   },[]);*/
-  const activ = 'Some other message';
+
+  useEffect(() => {
+    axios.get('https://www.boredapi.com/api/activity')
+      .then (res => {
+        console.log(res)
+        setActiv(res.data)
+      })
+
+      .catch(err => {
+        console.log(err)
+      })
+  }, [])
+
+  //const activ = 'Some other message';
 
   return (
     <>
@@ -21,7 +35,7 @@ function App() {
     <div>
       <h1>React-Bore-DOM</h1>
       <p>Click the Button get a Random activity</p>
-      <Activity activ={ activ } />
+      <Activity activ={ activ.activity } />
       <button>New Random activity</button>
     </div>
     </>
