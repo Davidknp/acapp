@@ -4,19 +4,10 @@ import axios from 'axios'
 
 function App() {
   const [activ, setActiv] = useState([]);
-
-  /*useEffect(() => {
-    fetch("https://www.boredapi.com/api/activity")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          setItems(result);
-        }
-      )
-  },[]);*/
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    axios.get('https://www.boredapi.com/api/activity')
+    axios.get('http://www.boredapi.com/api/activity')
       .then (res => {
         console.log(res)
         setActiv(res.data)
@@ -27,7 +18,22 @@ function App() {
       })
   }, [])
 
-  //const activ = 'Some other message';
+  const handleClick = async () => {
+    setIsLoading(true);
+    try {
+      const {activ} = await axios.get('http://www.boredapi.com/api/activity');
+
+      console.log('data is: ', JSON.stringify(activ, null, 4));
+
+      setActiv(activ);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
 
   return (
     <>
@@ -36,7 +42,7 @@ function App() {
       <h1>React-Bore-DOM</h1>
       <p>Click the Button get a Random activity</p>
       <Activity activ={ activ.activity } />
-      <button>New Random activity</button>
+      <button onClick={handleClick}>New Random activity</button>
     </div>
     </>
   );
